@@ -1,6 +1,6 @@
 pipeline {
     options { timestamps() }
-    agent any  
+    agent any
     stages {
         stage('Check scm') {
             steps {
@@ -16,17 +16,11 @@ pipeline {
         } // stage Build
         
         stage('Test') {
-            agent {
-                docker {
-                    image 'alpine'
-                    args '-u="root"'
-                }
-            }
             steps {
-                sh 'apk add --update python3 py-pip'
-                sh 'pip install Flask'
-                sh 'pip install xmlrunner'
-                sh 'python3 app_tests.py'
+                script {
+                    // Запустіть Docker контейнер тут
+                    sh 'docker run --rm -u root alpine /bin/sh -c "apk add --update python3 py-pip && pip install Flask xmlrunner && python3 app_tests.py"'
+                }
             }
             post {
                 always {
@@ -42,3 +36,4 @@ pipeline {
         } // stage Test
     } // stages
 } // pipeline
+
