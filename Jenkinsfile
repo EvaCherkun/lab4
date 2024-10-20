@@ -1,9 +1,8 @@
 pipeline {
     options { timestamps() }
-    agent none
+    agent any  
     stages {
         stage('Check scm') {
-            agent any
             steps {
                 checkout scm
             }
