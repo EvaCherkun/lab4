@@ -1,30 +1,42 @@
 pipeline {
-    options { timestamps() }
-    agent any
+    options { 
+        timestamps()  
+    }
+    
+    agent none  
+
     stages {
-        stage('Check scm') {
+        stage('Checkout SCM') {
+            agent any  
             steps {
-                checkout scm
+                checkout scm  
             }
-        } // stage Check scm
-        
+        }
+
         stage('Build') {
+            agent any  
             steps {
-                echo "Building ...${BUILD_NUMBER}"
+                echo "Building project with build number: ${BUILD_NUMBER}"
                 echo "Build completed"
             }
-        } // stage Build
-        
+        }
+
         stage('Test') {
-            steps {
-                script {
-                    // Запустіть Docker контейнер тут
-                    sh 'docker run --rm -u root alpine /bin/sh -c "apk add --update python3 py-pip && pip install Flask xmlrunner && python3 app_tests.py"'
+            agent {
+                docker { 
+                    image 'alpine'  
+                    args '-u="root"'  
                 }
+            }
+            steps {
+                sh 'apk add --update python3 py3-pip'  
+                sh 'pip install Flask'  
+                sh 'pip install xmlrunner'  
+                sh 'python3 app_tests.py'  
             }
             post {
                 always {
-                    junit 'test-reports/*.xml'
+                    junit 'test-reports/*.xml'  
                 }
                 success {
                     echo "Application testing successfully completed"
@@ -33,7 +45,6 @@ pipeline {
                     echo "Oooppss!!! Tests failed!"
                 }
             }
-        } // stage Test
-    } // stages
-} // pipeline
-
+        }
+    }
+}
