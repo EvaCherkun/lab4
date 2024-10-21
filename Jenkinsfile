@@ -34,7 +34,7 @@ pipeline {
                sh '. venv/bin/activate'
                 sh 'pip install Flask'  
                 sh 'pip install xmlrunner'  
-                sh 'python3 app_tests.py'  
+                sh 'python3 test_app.py'  
                 sh 'deactivate'
             }
             post {
