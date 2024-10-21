@@ -29,10 +29,13 @@ pipeline {
                 }
             }
             steps {
-                sh 'apk add --update python3 py3-pip'  
+            sh 'apk add --update python3 py3-pip'
+                sh 'python3 -m venv venv'
+               sh '. venv/bin/activate'
                 sh 'pip install Flask'  
                 sh 'pip install xmlrunner'  
                 sh 'python3 app_tests.py'  
+                sh 'deactivate'
             }
             post {
                 always {
