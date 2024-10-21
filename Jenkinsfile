@@ -31,7 +31,7 @@ pipeline {
             steps {
             sh 'apk add --update python3 py3-pip'
                 sh 'python3 -m venv venv'
-                sh '. venv/bin/activate && pip install Flask unittest2 xmlrunner'  
+                sh '. venv/bin/activate && pip3 install Flask unittest2 xmlrunner'  
                 sh '. venv/bin/activate && python3 test_app.py'  
                 sh 'deactivate'
             }
