@@ -2,7 +2,9 @@ pipeline {
     options { 
         timestamps()  
     }
-
+    environment {
+        DOCKER_HOST = 'unix:///var/run/docker.sock'
+    }
     agent {
         docker {
             image 'alpine'
@@ -28,25 +30,8 @@ pipeline {
             agent {
                 docker { 
                     image 'alpine'  
-                    args '-u root'  
+                    args '-u root -v /var/run/docker.sock:/var/run/docker.sock'  
                 }
             }
             steps {
-                sh 'apk add --update python3 py3-pip'  // Встановлення Python та pip
-                sh '. venv/bin/activate && pip3 install Flask unittest2 xmlrunner'  // Встановлення залежностей
-                sh '. venv/bin/activate && python3 test_app.py'  // Запуск тестів
-            }
-            post {
-                always {
-                    junit 'test-reports/*.xml'  // Вказівка на шлях до звітів JUnit
-                }
-                success {
-                    echo "Application testing successfully completed"
-                }
-                failure {
-                    echo "Oooppss!!! Tests failed!"
-                }
-            }
-        }
-    }
-}
+             
