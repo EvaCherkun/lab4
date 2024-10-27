@@ -33,7 +33,6 @@ pipeline {
             }
             steps {
                 sh 'apk add --update python3 py3-pip'  // Встановлення Python та pip
-                sh 'python3 -m venv venv'  // Створення віртуального середовища
                 sh '. venv/bin/activate && pip3 install Flask unittest2 xmlrunner'  // Встановлення залежностей
                 sh '. venv/bin/activate && python3 test_app.py'  // Запуск тестів
             }
